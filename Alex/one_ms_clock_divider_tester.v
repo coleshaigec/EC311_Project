@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 10/23/2023 08:54:59 AM
+// Create Date: 10/23/2023 08:26:57 AM
 // Design Name: 
-// Module Name: fsm_test
+// Module Name: clock_divider_test
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,31 +20,24 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module fsm_test(
+module one_ms_clock_divider_tester(
 
     );
     
-    reg clock; 
+    reg in_clk; 
     wire out_clk;
-    reg [15:0] a;
-    wire [6:0] cathode;
-    wire [7:0] anode;
     
-    fsm DUT (
-        .clock(clock),
-        .sixteen_bit_number(a),
-        .cathode(cathode),
-        .anode(anode)
+    one_ms_clk_divider DUT (
+        .in_clk(in_clk),
+        .out_clk(out_clk)
     ); 
     
     // Clock generator
-    always #1 clock = ~clock;
-    always #8 a = a + 8;
+    always #1 in_clk = ~in_clk;
     
     initial begin
-        clock = 0;
-        a = 0;
+        in_clk = 0;
     end
     initial #100 $finish;
-    
+
 endmodule

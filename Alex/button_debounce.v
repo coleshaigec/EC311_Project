@@ -35,7 +35,7 @@ module button_debounce(
     wire ms_clock;
     wire Q1,Q2,Q3;
     
-    clock_divider clock_div(clock,ms_clock);
+    one_ms_clk_divider ms_clock_div(clock,ms_clock);
     D_Flip_Flop D1(BTN, ms_clock,BTN_press);
     //D_Flip_Flop D2(Q1,seconds_clock,Q2);
     //D_Flip_Flop D3(Q2,seconds_clock,Q3);

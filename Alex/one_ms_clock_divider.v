@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module clock_divider(
+module one_ms_clock_divider(
     input clock, 
     output reg out_clk);
 	
