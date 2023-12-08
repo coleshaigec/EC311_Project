@@ -1,6 +1,6 @@
 module binary_to_BCD(
     input [26:0] twentyseven_bit_number,
-    output [31:0] BCD_number
+    output reg [31:0] BCD_number
 );
     // using Double Dabble algorithm as explained here: 
     // https://en.wikipedia.org/wiki/Double_dabble
