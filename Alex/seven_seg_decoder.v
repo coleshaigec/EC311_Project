@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module decoder2(
+module seven_seg_decoder(
         input [3:0] number,
         output reg [6:0] cathode
     );

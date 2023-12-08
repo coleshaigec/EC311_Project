@@ -22,12 +22,14 @@
 
 module seven_seg_fsm(
         input clock,
-        input [26:0] twentyseven_bit_number,
+        //input [7:0]swt, // FOR TESTING ONLY
+        input [26:0] twentyseven_bit_number, //UNCOMMENT FOR INTEGRATION
         output [6:0] cathode,
         output reg [7:0] anode
     );
     
-	reg [31:0] BCD_number;
+	//reg [26:0] twentyseven_bit_number; // FOR TESTING ONLY
+	wire [31:0] BCD_number;
     reg [3:0] four_bit_number;
     // instantiate decoder that decodes the four bit number into the cathode
     reg [2:0] state; // stores state of 
@@ -35,13 +37,18 @@ module seven_seg_fsm(
 	seven_seg_decoder dec7(four_bit_number,cathode);
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
     
+    
     initial begin
 		state = 0;
 		anode = 8'b11111111;
+		//twentyseven_bit_number = 0; // FOR TESTING ONLY
 	end
     
     always @(posedge ms_clock)
 	begin
+	   //twentyseven_bit_number[7:0] = swt[7:0]; // FOR TESTING ONLY
+
+		
 		// increment state
 		// set anode (which display do you want to set?)
 		//   hint: if state == 0, then set only the LSB of anode to zero,
