@@ -22,7 +22,7 @@
 
 module seven_seg_fsm(
         input clock,
-        input [31:0] thirtytwo_bit_number,
+        input [26:0] twentyseven_bit_number,
         output [6:0] cathode,
         output reg [7:0] anode
     );
@@ -31,7 +31,7 @@ module seven_seg_fsm(
     reg [3:0] four_bit_number;
     // instantiate decoder that decodes the four bit number into the cathode
     reg [2:0] state; // stores state of 
-    binary_to_BCD b2BCD(thirtytwo_bit_number,BCD_number);
+    binary_to_BCD b2BCD(twentyseven_bit_number,BCD_number);
 	seven_seg_decoder dec7(four_bit_number,cathode);
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
     
