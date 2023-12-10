@@ -35,9 +35,10 @@ module debounced_switch_counter(
     reg mode;
     wire debounced_swt;
     reg [7:0]count;
+    reg [7:0] decs = 8'b10101010;
     
     //counter ct(debounced_swt,count);
-    seven_seg_fsm disp(clock,mode,count,cathode,anode);
+    seven_seg_fsm disp(clock,mode,count,decs,cathode,anode);
     button_debounce switch(swt[0],clock,debounced_swt);
     
     initial begin
