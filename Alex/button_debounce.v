@@ -24,7 +24,8 @@
 
 // USED CIRCUIT SCHEMATIC FROM https://allaboutfpga.com/vhdl-code-for-debounce-circuit-in-fpga/
 
-
+//May require this line in constraints file: set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets BTNC_IBUF]
+//Works for switches and buttons
 
 module button_debounce(
     input BTN,
@@ -32,21 +33,14 @@ module button_debounce(
     output BTN_press
     );
     
-    wire ms_clock;
-    wire Q1,Q2,Q3;
+    wire div_clock;
+    reg [5:0] counter;
     
-    one_ms_clk_divider ms_clock_div(clock,ms_clock);
-    D_Flip_Flop D1(BTN, ms_clock,BTN_press);
-    //D_Flip_Flop D2(Q1,seconds_clock,Q2);
-    //D_Flip_Flop D3(Q2,seconds_clock,Q3);
-    //and(BTN_press, Q1,Q2,Q3);
+    fifty_ms_clock_divider clock_div(clock,div_clock);
+    D_Flip_Flop D1(BTN, div_clock,BTN_press);
     
     
-    /*always @(seconds_clock) begin
-        Q1 <= BTN;
-        Q2 <= Q1;
-        Q3 <= Q2;
-    end*/
+    
 
     
 endmodule

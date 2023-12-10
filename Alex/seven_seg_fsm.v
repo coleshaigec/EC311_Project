@@ -22,15 +22,15 @@
 
 module seven_seg_fsm(
         input clock,
-		input mode, // 0 = Decimal, 1 = Hexadecimal
-        //input [7:0]swt, // FOR TESTING ONLY
+		input mode, // 0 = Decimal, 1 = Hexadecimal //UNCOMMENT FOR INTEGRATION
+        //input [15:0]swt, // FOR TESTING ONLY
         input [31:0] input_number, //UNCOMMENT FOR INTEGRATION
         output [6:0] cathode,
         output reg [7:0] anode
     );
     
-	//reg [26:0] twentyseven_bit_number; // FOR TESTING ONLY
-	wire [26:0] twentyseven_bit_number; //May need to be a reg
+	//reg [31:0] input_number; // FOR TESTING ONLY
+	//reg mode; //FOR TESTING ONLY
 	wire [31:0] BCD_number;
 	wire [31:0] disp_number;
     reg [3:0] four_bit_number;
@@ -40,7 +40,8 @@ module seven_seg_fsm(
     
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
     seven_seg_decoder dec7(four_bit_number,cathode);
-    binary_to_BCD b2BCD(twentyseven_bit_number,BCD_number);
+    binary_to_BCD b2BCD(input_number[26:0],BCD_number);
+
 
     assign disp_number = (mode == 0) ? BCD_number : input_number;
 		
@@ -48,13 +49,13 @@ module seven_seg_fsm(
 		state = 0;
 		anode = 8'b11111111;
 		four_bit_number = 0;
-		//twentyseven_bit_number = 0; // FOR TESTING ONLY
+		//input_number = 0; // FOR TESTING ONLY
 	end
     
     always @(posedge ms_clock)
 	begin
-	   //twentyseven_bit_number[7:0] = swt[7:0]; // FOR TESTING ONLY
-
+	   //input_number[14:0] = swt[14:0]; // FOR TESTING ONLY
+       //mode = swt[15]; //FOR TESTING ONLY
 		
 		// increment state
 		// set anode (which display do you want to set?)
