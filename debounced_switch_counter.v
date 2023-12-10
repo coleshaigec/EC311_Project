@@ -28,7 +28,7 @@ module debounced_switch_counter(
     //input BTNC,
     input clock,
     //output reg [7:0]led
-    output [6:0] cathode,
+    output [7:0] cathode,
     output [7:0] anode
     );
     

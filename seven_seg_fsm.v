@@ -26,7 +26,7 @@ module seven_seg_fsm(
         //input [15:0]swt, // FOR TESTING ONLY
         input [31:0] input_number, //UNCOMMENT FOR INTEGRATION
 		input [7:0] dec_points,
-		output [6:0] cathode,
+		output [7:0] cathode,
         output reg [7:0] anode
     );
     
