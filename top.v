@@ -11,27 +11,41 @@ module top (
     //IO outputs
     output [7:0] cathode,
     output [7:0] anode
-    );
+);
 
-    //Declare wires and regs
-    reg display_mode;
+//Declare wires and regs
+    //For display
+    reg display_number_format;
+    reg [31:0] number_to_display;
+    reg [7:0] decimal_points;
+
+    //For debouncing
     wire [15:0] debounced_sw;
     wire debounced_BTNC;
     wire debounced_BTNU;
     wire debounced_BTND;
-    wire debounced_BTL;
+    wire debounced_BTNL;
     wire debounced_BTNR;
-    reg [31:0] number_to_display;
-    reg [7:0] decimal_points;
+
+    //For leaderboard - Some of these may need to registers
+    wire [21:0] leaderboard_time_in;
+    wire [1:0] leaderboard_stopwatch_mode;
+    wire [2:0] leaderboard_display_mode;
+    wire [21:0] leaderboard_number;
+    wire signal_sound_1;
+    wire signal_sound_2;
+    wire signal_sound_3;
+    wire [2:0] leaderboard_LED;
+    wire [1:0] leaderboard_slow_or_fast;
+
+//Instantiate display
+    seven_seg_fsm disp(clock,display_number_format,number_to_display,decimal_points,cathode,anode);
     
-    //Instantiate display
-    seven_seg_fsm disp(clock,display_mode,number_to_display,decimal_points,cathode,anode);
-    
-    //Instantiate debouncers
+//Instantiate debouncers
     button_debounce BTNC_debouncer(BTNC,clock,debounced_BTNC);
     button_debounce BTNU_debouncer(BTNU,clock,debounced_BTNU);
     button_debounce BTND_debouncer(BTND,clock,debounced_BTND);
-    button_debounce BTNL_debouncer(BTNL,clock,debounced_BTL);
+    button_debounce BTNL_debouncer(BTNL,clock,debounced_BTNL);
     button_debounce BTNR_debouncer(BTNR,clock,debounced_BTNR);
     
     button_debounce sw0_debouncer(sw[0],clock,debounced_sw[0]);
@@ -50,10 +64,23 @@ module top (
     button_debounce sw13_debouncer(sw[13],clock,debounced_sw[13]);
     button_debounce sw14_debouncer(sw[14],clock,debounced_sw[14]);
     button_debounce sw15_debouncer(sw[15],clock,debounced_sw[15]);
-        
-    //Set initial values
+    
+//Instantiate leaderboard
+    leaderboard leaderboard_instance (
+        .time_in(leaderboard_time_in),
+        .stopwatch_mode(leaderboard_stopwatch_mode),
+        .display_mode(leaderboard_display_mode),
+        .leaderboard_number(leaderboard_number),
+        .signal_sound_1(signal_sound_1),
+        .signal_sound_2(signal_sound_2),
+        .signal_sound_3(signal_sound_3),
+        .leaderboard_LED(leaderboard_LED),
+        .slow_or_fast(leaderboard_slow_or_fast)
+    );
+
+//Set initial values
     initial begin
-        display_mode = 1;
+        display_number_format = 0; //Default to decimal mode
         number_to_display = 0;
         decimal_points = 0;
     end
