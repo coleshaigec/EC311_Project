@@ -39,7 +39,7 @@ module debounced_switch_counter(
     
     //counter ct(debounced_swt,count);
     seven_seg_fsm disp(clock,mode,count,decs,cathode,anode);
-    button_debounce switch(swt[0],clock,debounced_sw);
+    button_debounce switch(sw[0],clock,debounced_sw);
     
     initial begin
         mode = 1;
