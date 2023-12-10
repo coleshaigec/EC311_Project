@@ -31,8 +31,10 @@ module leaderboard_tb(
     wire signal_sound_1;
     wire signal_sound_2;
     wire signal_sound_3;
+    wire [2:0] leaderboard_LED;
+    wire [1:0] slow_or_fast;
     
-    leaderboard lb(.time_in(time_in),.stopwatch_mode(stopwatch_mode),.display_mode(display_mode),.leaderboard_number(leaderboard_number),.signal_sound_1(signal_sound_1),.signal_sound_2(signal_sound_2),.signal_sound_3(signal_sound_3));
+    leaderboard lb(.time_in(time_in),.stopwatch_mode(stopwatch_mode),.display_mode(display_mode),.leaderboard_number(leaderboard_number),.signal_sound_1(signal_sound_1),.signal_sound_2(signal_sound_2),.signal_sound_3(signal_sound_3),.leaderboard_LED(leaderboard_LED),.slow_or_fast(slow_or_fast));
     
     
     initial begin
@@ -44,11 +46,14 @@ module leaderboard_tb(
     display_mode=3'b000;
     time_in=142000;
     #10
+    display_mode=3'b101;
     time_in=139000;
     #10
+    display_mode=3'b110;
     time_in=150000;
     #10
     $finish;
     end
     
 endmodule
+
