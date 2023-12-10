@@ -38,6 +38,7 @@ module seven_seg_fsm(
     // instantiate decoder that decodes the four bit number into the cathode
     reg [2:0] state;
     wire ms_clock;
+	reg cur_point;
     
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
     seven_seg_decoder dec7(four_bit_number,cur_point,cathode);
