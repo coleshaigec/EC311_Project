@@ -75,7 +75,7 @@ module stopwatch(
     initial begin
         present_state = S0;                                          // machine will stay in start state for one clock cycle
         next_state = S0;                                             // machine will stay in start state for one clock cycle
-        HCT = 39'b000000000000000000000001110101001100000;           // hard coded time initially set at one minute
+        HCT = 39'b000000101100101101000001011110000000000;           // hard coded time initially set at one minute
         maxtime = 0;                                                 // initialize all count registers at zero
         u_count = 0;                                                 // initialize all count registers at zero
         d_count = 0;                                                 // initialize all count registers at zero
@@ -126,16 +126,14 @@ module stopwatch(
            end
        S1:
            begin    
-            if (~p && u && rst) begin
-              maxtime = 0;      
+            if (~p && u && rst) begin     
               u_count = 0;      
               d_count = 0;     
               fix_d_count = 0;
               t = 0;
               next_state = S3;
             end
-            else if (~p && ~u && rst) begin
-              maxtime = 0;      
+            else if (~p && ~u && rst) begin     
               u_count = 0;      
               d_count = 0;     
               fix_d_count = 0;
@@ -155,8 +153,7 @@ module stopwatch(
                 t = maxtime;
             end
             else if (p && inc && min && rst) begin
-                next_state = S15;
-                maxtime = 0;      
+                next_state = S15;     
                 u_count = 0;      
                 d_count = 0;     
                 fix_d_count = 0;
@@ -177,24 +174,21 @@ module stopwatch(
             next_state = S1;
           end
           else if (p && rst) begin
-            next_state = S1;
-            maxtime = 0;      
+            next_state = S1;    
             u_count = 0;      
             d_count = 0;     
             fix_d_count = 0;
             t=0;
           end
           else if (~p && u && rst) begin
-           next_state = S3;
-           maxtime = 0;      
+           next_state = S3;      
            u_count = 0;      
            d_count = 0;     
            fix_d_count = 0;
            t = 0;
           end
           else if (~p && ~u && rst) begin
-           next_state = S11;
-           maxtime = 0;      
+           next_state = S11;     
            u_count = 0;      
            d_count = 0;     
            fix_d_count = 0;
@@ -434,7 +428,7 @@ module stopwatch(
         begin
           if (p && ~rst) begin
            next_state = S1;
-           t = d_count;
+           t = maxtime;
           end
           else if (p && rst) begin
            next_state = S1;      
@@ -744,11 +738,11 @@ module stopwatch(
          end
          else if (~rst && p) begin
           next_state = S1;
-          maxtime = maxtime + 39'b000000000000000000000001110101001100000;
+          maxtime = maxtime + 39'b000000101100101101000001011110000000000;
          end
          else if (~rst && ~p) begin
           next_state = S0;
-          maxtime = maxtime + 39'b000000000000000000000001110101001100000;
+          maxtime = maxtime + 39'b000000101100101101000001011110000000000;
          end
         end
        S16:
@@ -771,11 +765,11 @@ module stopwatch(
          end
          else if (~rst && p) begin
           next_state = S1;
-          maxtime = maxtime + 22'b0000000000001111101000; 
+          maxtime = maxtime + 39'b000000000000101111101011110000100000000; 
          end
          else if (~rst && ~p) begin
           next_state = S0;
-          maxtime = maxtime + 22'b0000000000001111101000; 
+          maxtime = maxtime + 39'b000000000000101111101011110000100000000; 
          end
         end
        endcase
