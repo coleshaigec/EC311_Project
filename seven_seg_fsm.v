@@ -22,9 +22,9 @@
 
 module seven_seg_fsm(
         input clock,
-		input mode, // 0 = Decimal, 1 = Hexadecimal //UNCOMMENT FOR INTEGRATION
+		input [1:0] mode, // 0 = Decimal, 1 = Hexadecimal, 2 = min, sec //UNCOMMENT FOR INTEGRATION
         //input [15:0]swt, // FOR TESTING ONLY
-        input [31:0] input_number, //UNCOMMENT FOR INTEGRATION
+        input [38:0] input_number, //UNCOMMENT FOR INTEGRATION
 		input [7:0] dec_points,
 		output [7:0] cathode,
         output reg [7:0] anode
@@ -39,19 +39,51 @@ module seven_seg_fsm(
     reg [2:0] state;
     wire ms_clock;
 	reg cur_point;
+
+	wire [5:0] minutes;
+	wire [5:0] seconds;
+	wire [9:0] milliseconds;
+	wire [5:0] BCD_minutes;
+	wire [5:0] BCD_seconds;
+	wire [9:0] BCD_milliseconds;
+	reg [31:0] time_out; //output to display in minutes, seconds, milliseconds
     
+	//for decimal mode
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
     seven_seg_decoder dec7(four_bit_number,cur_point,cathode);
-    binary_to_BCD b2BCD(input_number[26:0],BCD_number);
+    
+	//for hex mode
+	//binary_to_BCD b2BCD(input_number[26:0],BCD_number);
+    
+	//for min,sec mode
+	//time_conversion t_conv(input_number,minutes,seconds,milliseconds);
+	time_conversion t_conv(input_number,disp_number);
+	/*binary_to_BCD b2BCD_min(minutes,BCD_minutes);
+	binary_to_BCD b2BCD_sec(seconds,BCD_seconds);
+	binary_to_BCD b2BCD_ms(milliseconds,BCD_milliseconds);
 
-
-    assign disp_number = (mode == 0) ? BCD_number : input_number;
+*/
+	/*always @(input_number) begin
+		//time_out = {4'b0000,BCD_minutes,BCD_seconds,BCD_milliseconds};
+		disp_number = time_out;
+		/*if (mode == 0) begin
+			disp_number <= BCD_number;
+		end else if(mode == 1) begin
+			disp_number <= input_number[31:0];
+		end else begin
+			disp_number <= time_out;
+		end
+	end*/
 		
     initial begin
 		state = 0;
 		anode = 8'b11111111;
 		four_bit_number = 0;
 		cur_point = 0;
+		//time_out = 0;
+		//minutes = 0;
+		//seconds = 0;
+		//milliseconds = 0;
 		//input_number = 0; // FOR TESTING ONLY
 	end
     

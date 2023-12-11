@@ -1,3 +1,6 @@
+`timescale 1ns / 1ps
+
+
 module binary_to_BCD(
     input [26:0] twentyseven_bit_number,
     output reg [31:0] BCD_number
