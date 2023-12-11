@@ -15,7 +15,7 @@ module top (
 
 //Declare wires and regs
     //For display
-    reg [1:0] display_number_format;
+    reg display_number_format;
     reg [31:0] number_to_display;
     reg [7:0] decimal_points;
 
@@ -37,11 +37,6 @@ module top (
     wire signal_sound_3;
     wire [2:0] leaderboard_LED;
     wire [1:0] leaderboard_slow_or_fast;
-
-    //For stopwatch
-    wire [38:0] stopwatch_time_ten_ns;
-    wire stopwatch_zero;
-    reg [31:0] stopwatch_time_min_sec; //Need to make a module to convert from ns to min,sec
 
 //Instantiate display
     seven_seg_fsm disp(clock,display_number_format,number_to_display,decimal_points,cathode,anode);
@@ -83,24 +78,13 @@ module top (
         .slow_or_fast(leaderboard_slow_or_fast)
     );
 
-//Instantiate stopwatch
-    stopwatch stopwatch_instance (
-        .s(debounced_BTNC),
-        .p(debounced_sw[0]),
-        .clk(clock),
-        .u(debounced_sw[1]),
-        .rst(debounced_BTNU),
-        .inc(debounced_BTND),
-        .min(debounced_sw[2]),
-        .t(stopwatch_time_ten_ns),
-        .zero(stopwatch_zero),
-    );
-
 //Set initial values
     initial begin
         display_number_format = 0; //Default to decimal mode
         number_to_display = 0;
         decimal_points = 0;
     end
+    
+    
 
 endmodule
