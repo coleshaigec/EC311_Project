@@ -119,31 +119,77 @@ stopwatch stopwatch_UUT(.s(startstop), .p(prog), .clk(clk), .u(up), .rst(rst), .
 // CONFIGURATION THREE
 // This configuration tests the program mode on the stopwatch
 // The program signal is hard-coded at 1
+// The signals here can easily be altered to test responses to various incrementing behaviors (seconds, minutes, resets, etc.)
+// This mode appears to be working correctly
 
-initial begin
+//initial begin
 //    clk = 0;
-//    prog = 1;
+//    prog = 0;
 //    up = 0; 
 //    inc = 0;
 //    min = 1;
+//    startstop = 0; rst = 0; #16;
+//    startstop = 1; rst = 0; #15;
+//    startstop = 0; rst = 0; #200;
+//    startstop = 1; rst = 0; #15;
+//    startstop = 0; rst = 0; prog = 1;
+//    inc = 1; #16;
+//    inc = 0; #12;
+////    inc = 1; #12;
+////    inc = 0; #12;
+//    inc = 1; #16;
+////    inc = 0; #12;
+////    inc = 1; #12;
+
+//    min = 0;
+//    inc = 0; #12;
+//    inc = 1; #12;
+//    inc = 0; #12;
+//    inc = 1; #12;
+//    inc = 0; #12;
+//    inc = 1; #12;
+//    inc = 0; #12;
+//    inc = 1; #12;
+//    inc = 0; #12;
+//    inc = 1; #12;
+//    inc = 0; #12;
+//    inc = 1; #12;
+//    inc = 0;
+//    prog = 0;
+//    rst = 1; #15
+//    rst = 0; #100
+//    startstop = 1; rst = 0; #17
 //    startstop = 0;
+//end
+
+//always begin
+//#10 clk = ~clk;
+//end
+
+// CONFIGURATION FOUR
+// This mode tests transitions between states, with a particular focus on ensuring seamless transitions into and out of program mode
+
+initial begin
     clk = 0;
     prog = 0;
     up = 0; 
     inc = 0;
-    min = 0;
+    min = 1;
     startstop = 0; rst = 0; #16;
     startstop = 1; rst = 0; #15;
-    startstop = 0; rst = 0; #200;
+    startstop = 0; rst = 0; #50;
     startstop = 1; rst = 0; #15;
-    startstop = 0; rst = 0;
-    inc = 1; #12;
+    startstop = 0; rst = 0; #120;
+    prog = 1;
+    inc = 1; #16;
     inc = 0; #12;
-    inc = 1; #12;
-    inc = 0; #12;
-    inc = 1; #12;
-    inc = 0; #12;
-    inc = 1; #12;
+//    inc = 1; #12;
+//    inc = 0; #12;
+    inc = 1; #16;
+//    inc = 0; #12;
+//    inc = 1; #12;
+
+    min = 0;
     inc = 0; #12;
     inc = 1; #12;
     inc = 0; #12;
@@ -157,8 +203,9 @@ initial begin
     inc = 0; #12;
     inc = 1; #12;
     inc = 0;
+    prog = 0;
     rst = 1; #15
-    rst = 0;
+    rst = 0; #100
     startstop = 1; rst = 0; #17
     startstop = 0;
 end
@@ -166,8 +213,6 @@ end
 always begin
 #10 clk = ~clk;
 end
-
-
 
 
 
