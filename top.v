@@ -65,7 +65,7 @@ reg on = 1;
     reg [7:0] decimal_points = 8'b00101000;
 
 // Wires for debounced signals
-    wire s;
+    wire db_st;
     wire inc;
     wire rst;
 
@@ -92,13 +92,13 @@ reg on = 1;
 //    wire [38:0] disptime;
 // Instantiate debouncers
 
-    debouncer st_debounce(.in(startstop),.clock(clock),.db(s));
+    debouncer st_debounce(.in(startstop),.clock(clock),.db(db_st));
     debouncer inc_debounce(.in(increment),.clock(clock),.db(inc));
     debouncer rst_debounce(.in(reset),.clock(clock),.db(rst));
 
 // Instantiate stopwatch
 
-    stopwatch tl_stopwatch(.s(on), .p(prog), .clk(clock), .u(up), .rst(rst), .inc(inc), .min(min), .t(t), .zero(zero));
+    stopwatch tl_stopwatch(.s(db_st), .p(prog), .clk(clock), .u(up), .rst(rst), .inc(inc), .min(min), .t(t), .zero(zero));
         
 // Instantiate time display MUX
 

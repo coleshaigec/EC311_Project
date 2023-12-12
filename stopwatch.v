@@ -77,8 +77,8 @@ module stopwatch(
     initial begin
         present_state = S0;                                          // machine will stay in start state for one clock cycle
         next_state = S0;                                             // machine will stay in start state for one clock cycle
-//        HCT = 39'b000000101100101101000001011110000000000;           // hard coded time initially set at one minute
-        HCT = 4;
+        HCT = 39'b000000101100101101000001011110000000000;           // hard coded time initially set at one minute
+//        HCT = 4;
         maxtime = 0;                                                 // initialize all count registers at zero
         u_count = 0;                                                 // initialize all count registers at zero
         d_count = 0;                                                 // initialize all count registers at zero

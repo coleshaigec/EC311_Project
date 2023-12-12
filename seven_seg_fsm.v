@@ -66,14 +66,14 @@ module seven_seg_fsm(
 	/*always @(input_number) begin
 		//time_out = {4'b0000,BCD_minutes,BCD_seconds,BCD_milliseconds};
 		disp_number = time_out;
-		/*if (mode == 0) begin
+		/if (mode == 0) begin
 			disp_number <= BCD_number;
 		end else if(mode == 1) begin
 			disp_number <= input_number[31:0];
 		end else begin
 			disp_number <= time_out;
 		end
-	end*/
+	end*/ 
 		
     initial begin
 		state = 0;
