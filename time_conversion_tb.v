@@ -35,11 +35,11 @@ module time_conversion_tb(
 
    
    always begin
-        #10 time_in = time_in + 1000000;
+        #10 time_in = time_in + 39'b11110100001001000000;
    end
    
    initial begin
-        time_in = 3000000000;
+        time_in = 39'b10110010110100000101111000000000;
    end 
    
 endmodule
