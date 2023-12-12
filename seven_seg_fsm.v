@@ -22,7 +22,7 @@
 
 module seven_seg_fsm(
         input clock,
-		input [1:0] mode, // 0 = Decimal, 1 = Hexadecimal, 2 = min, sec //UNCOMMENT FOR INTEGRATION
+		//input [1:0] mode, // 0 = Decimal, 1 = Hexadecimal, 2 = min, sec //UNCOMMENT FOR INTEGRATION
         //input [15:0]swt, // FOR TESTING ONLY
         input [38:0] input_number, //UNCOMMENT FOR INTEGRATION
 		input [7:0] dec_points,

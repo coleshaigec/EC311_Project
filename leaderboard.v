@@ -20,27 +20,28 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module leaderboard(
-    input wire[21:0] time_in,
+    input wire[38:0] time_in,
     input [1:0] stopwatch_mode,
     input  [2:0] display_mode,
-    output reg [21:0] leaderboard_number,
+//    output reg [21:0] leaderboard_number,
     output reg signal_sound_1,
     output reg signal_sound_2,
     output reg signal_sound_3,
     output reg [2:0] leaderboard_LED,
-    output reg [1:0] slow_or_fast
+    output reg [1:0] slow_or_fast,
+    output reg [38:0] fast_1,
+    output reg [38:0] fast_2,
+    output reg [38:0] fast_3,
+    output reg [38:0] slow_1,
+    output reg [38:0] slow_2,
+    output reg [38:0] slow_3
 );
-    reg [21:0] fast_1=0;
-    reg [21:0] fast_2=0;
-    reg [21:0] fast_3=0;
-    reg [21:0] slow_1=0;
-    reg [21:0] slow_2=0;
-    reg [21:0] slow_3=0;
-    reg [21:0] time_in_wire;
-    wire [21:0] time_in_reg;
 
+    
+    reg [38:0] time_in_wire;
+    wire [38:0] time_in_reg;
     always @* begin
-        assign time_in_wire=time_in;
+        time_in_wire=time_in;
     end
 
     always @(time_in)
@@ -100,43 +101,45 @@ module leaderboard(
             end
         endcase
     end 
+// delete every occurrence of leaderboard number
+// change bitwidths as necessary
 
     always @* begin
         case(display_mode)
             3'b001: begin
-                assign leaderboard_number=fast_1;
-                assign slow_or_fast=2'b11;
-                assign leaderboard_LED=3'b001;
+//                assign leaderboard_number=fast_1;
+                slow_or_fast=2'b11;
+                leaderboard_LED=3'b001;
             end
             3'b010: begin
-                assign leaderboard_number=fast_2;
-                assign slow_or_fast=2'b11;
-                assign leaderboard_LED=3'b011;
+//                assign leaderboard_number=fast_2;
+                slow_or_fast=2'b11;
+                leaderboard_LED=3'b011;
             end
             3'b011: begin
-                assign leaderboard_number=fast_3;
-                assign slow_or_fast=2'b11;
-                assign leaderboard_LED=3'b111;
+//                assign leaderboard_number=fast_3;
+                slow_or_fast=2'b11;
+                leaderboard_LED=3'b111;
             end
             3'b100: begin
-                assign leaderboard_number=slow_1;
-                assign slow_or_fast=2'b01;
-                assign leaderboard_LED=3'b001;
+//                assign leaderboard_number=slow_1;
+                slow_or_fast=2'b01;
+                leaderboard_LED=3'b001;
             end
             3'b101: begin
-                assign leaderboard_number=slow_2;
-                assign slow_or_fast=2'b01;
-                assign leaderboard_LED=3'b011;
+//                assign leaderboard_number=slow_2;
+                slow_or_fast=2'b01;
+                leaderboard_LED=3'b011;
             end
             3'b110: begin
-                assign leaderboard_number=slow_3;
-                assign slow_or_fast=2'b01;
-                assign leaderboard_LED=3'b111;
+//                assign leaderboard_number=slow_3;
+                slow_or_fast=2'b01;
+                leaderboard_LED=3'b111;
             end
             default: begin
-                assign leaderboard_number=0;
-                assign slow_or_fast=2'b00;
-                assign leaderboard_LED=3'b000;
+//                assign leaderboard_number=0;
+                slow_or_fast=2'b00;
+                leaderboard_LED=3'b000;
             end
         endcase
     end

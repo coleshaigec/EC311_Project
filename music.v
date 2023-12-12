@@ -129,7 +129,7 @@ module music(
     end
 
     // Stay in BEEP_STATE until the delay is complete
-    if (delay_counter < 25_000_000) begin
+    if (delay_counter < 25000000) begin
         state <= BEEP_STATE;
     end else begin
         state <= IDLE_STATE;
@@ -198,26 +198,26 @@ module divide_by12(
 	assign remainder[3:2] = remainder3to2;  // and the last 2 bits come from the case statement
 endmodule
 /////////////////////////////////////////////////////
-module clock_divider(
-	input in_clk,
-	output reg out_clk
-);
+//module clock_divider(
+//	input in_clk,
+//	output reg out_clk
+//);
 	
-	reg[32:0] count;
+//	reg[32:0] count;
 
-	initial begin
-		count = 0;
-		out_clk = 0;
-	end
+//	initial begin
+//		count = 0;
+//		out_clk = 0;
+//	end
 	
-	always @(posedge in_clk)
-	begin
-		count = count + 1;
-		if (count == 2) begin
-			out_clk <= ~out_clk;
-			count <= 0;
-		end
-	end
+//	always @(posedge in_clk)
+//	begin
+//		count = count + 1;
+//		if (count == 2) begin
+//			out_clk <= ~out_clk;
+//			count <= 0;
+//		end
+//	end
 
 
-endmodule
+//endmodule

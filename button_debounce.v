@@ -27,17 +27,17 @@
 //May require this line in constraints file: set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets BTNC_IBUF]
 //Works for switches and buttons
 
-module button_debounce(
-    input BTN,
+module debouncer(
+    input in,
     input clock,
-    output BTN_press
+    output db
     );
     
     wire div_clock;
     reg [5:0] counter;
     
     fifty_ms_clock_divider clock_div(clock,div_clock);
-    D_Flip_Flop D1(BTN, div_clock,BTN_press);
+    D_Flip_Flop D1(in, div_clock,db);
     
     
     

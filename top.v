@@ -1,90 +1,122 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: Boston University
+// Engineer: Cole Shaigec, Alex Melnick, Henry Bega, Macy Bryer-Charette
+// 
+// Create Date: 12/11/2023 11:26:07 AM
+// Design Name: Stopwatch
+// Module Name: top
+// Project Name: 
+// Target Devices: XILINX ARTIX-7
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+// NEW SIGNALS
+
+// BUTTONS
+// startstop
+// inc
+// rst
+
+// SWITCHES
+// [2:0] display_mode
+// prog
+// up
+// min
+// [1:0] stopwatch_mode
+
+
+// LED output
+// 5 LEDs for Henry
+// 2 for slow_or_fast
+// 3 for leaderboard_LED
+
 module top (
-    //IO inputs
-    input [15:0] sw,
-    input BTNC,
-    input BTNU,
-    input BTND,
-    input BTNL,
-    input BTNR,
-    //Clock input
+    input prog,
+    input increment,
+    input reset,
+    input up,
+    input min,
+    input startstop,
+    input [1:0] stopwatch_mode,
+    input  [2:0] display_mode,
     input clock,
-    //IO outputs
+//    output speaker,
+    output [2:0] rank,
+    output [1:0] lb_mode,
     output [7:0] cathode,
     output [7:0] anode
 );
 
-//Declare wires and regs
-    //For display
-    reg display_number_format;
+reg on = 1;
+// Wire and register declarations
+
+// Registers for display
+    //reg display_number_format;
     reg [31:0] number_to_display;
-    reg [7:0] decimal_points;
+    reg [7:0] decimal_points = 8'b00101000;
 
-    //For debouncing
-    wire [15:0] debounced_sw;
-    wire debounced_BTNC;
-    wire debounced_BTNU;
-    wire debounced_BTND;
-    wire debounced_BTNL;
-    wire debounced_BTNR;
+// Wires for debounced signals
+    wire s;
+    wire inc;
+    wire rst;
 
-    //For leaderboard - Some of these may need to registers
-    wire [21:0] leaderboard_time_in;
-    wire [1:0] leaderboard_stopwatch_mode;
-    wire [2:0] leaderboard_display_mode;
-    wire [21:0] leaderboard_number;
-    wire signal_sound_1;
-    wire signal_sound_2;
-    wire signal_sound_3;
-    wire [2:0] leaderboard_LED;
-    wire [1:0] leaderboard_slow_or_fast;
+// Wires for stopwatch i/O signals
+    wire zero;
+//    wire clkSW;
+    wire [38:0] t;
+//    one_ms_clock_divider Babs(clock, clkSW);
 
+// Output wires for leaderboard
+
+    wire sound1;
+    wire sound2;
+    wire sound3;
+
+// Output registers for leaderboard and time MUX
+
+//    wire [38:0] up1;
+//    wire [38:0] up2;
+//    wire [38:0] up3;
+//    wire [38:0] down1;
+//    wire [38:0] down2;
+//    wire [38:0] down3;
+//    wire [38:0] disptime;
+// Instantiate debouncers
+
+    debouncer st_debounce(.in(startstop),.clock(clock),.db(s));
+    debouncer inc_debounce(.in(increment),.clock(clock),.db(inc));
+    debouncer rst_debounce(.in(reset),.clock(clock),.db(rst));
+
+// Instantiate stopwatch
+
+    stopwatch tl_stopwatch(.s(on), .p(prog), .clk(clock), .u(up), .rst(rst), .inc(inc), .min(min), .t(t), .zero(zero));
+        
+// Instantiate time display MUX
+
+// Need to reconfigure leaderboard to get it to spit out six output registers before we can use the time MUX
+
+//    time_MUX dispMUX(.sel(display_mode), .up_time1(up1), .up_time2(up2), .up_time3(up3), .down_time1(down1), .down_time2(down2), .down_time3(down3), .disp_time(disptime), .timewire(t));
+    
 //Instantiate display
-    seven_seg_fsm disp(clock,display_number_format,number_to_display,decimal_points,cathode,anode);
-    
-//Instantiate debouncers
-    button_debounce BTNC_debouncer(BTNC,clock,debounced_BTNC);
-    button_debounce BTNU_debouncer(BTNU,clock,debounced_BTNU);
-    button_debounce BTND_debouncer(BTND,clock,debounced_BTND);
-    button_debounce BTNL_debouncer(BTNL,clock,debounced_BTNL);
-    button_debounce BTNR_debouncer(BTNR,clock,debounced_BTNR);
-    
-    button_debounce sw0_debouncer(sw[0],clock,debounced_sw[0]);
-    button_debounce sw1_debouncer(sw[1],clock,debounced_sw[1]);
-    button_debounce sw2_debouncer(sw[2],clock,debounced_sw[2]);
-    button_debounce sw3_debouncer(sw[3],clock,debounced_sw[3]);
-    button_debounce sw4_debouncer(sw[4],clock,debounced_sw[4]);
-    button_debounce sw5_debouncer(sw[5],clock,debounced_sw[5]);
-    button_debounce sw6_debouncer(sw[6],clock,debounced_sw[6]);
-    button_debounce sw7_debouncer(sw[7],clock,debounced_sw[7]);
-    button_debounce sw8_debouncer(sw[8],clock,debounced_sw[8]);
-    button_debounce sw9_debouncer(sw[9],clock,debounced_sw[9]);
-    button_debounce sw10_debouncer(sw[10],clock,debounced_sw[10]);
-    button_debounce sw11_debouncer(sw[11],clock,debounced_sw[11]);
-    button_debounce sw12_debouncer(sw[12],clock,debounced_sw[12]);
-    button_debounce sw13_debouncer(sw[13],clock,debounced_sw[13]);
-    button_debounce sw14_debouncer(sw[14],clock,debounced_sw[14]);
-    button_debounce sw15_debouncer(sw[15],clock,debounced_sw[15]);
+
+    seven_seg_fsm disp_FSM(.clock(clock),.input_number(t), .dec_points(decimal_points),.cathode(cathode),.anode(anode));
     
 //Instantiate leaderboard
-    leaderboard leaderboard_instance (
-        .time_in(leaderboard_time_in),
-        .stopwatch_mode(leaderboard_stopwatch_mode),
-        .display_mode(leaderboard_display_mode),
-        .leaderboard_number(leaderboard_number),
-        .signal_sound_1(signal_sound_1),
-        .signal_sound_2(signal_sound_2),
-        .signal_sound_3(signal_sound_3),
-        .leaderboard_LED(leaderboard_LED),
-        .slow_or_fast(leaderboard_slow_or_fast)
-    );
 
-//Set initial values
-    initial begin
-        display_number_format = 0; //Default to decimal mode
-        number_to_display = 0;
-        decimal_points = 0;
-    end
-    
-    
+//    leaderboard tl_leaderboard(.time_in(disptime), .stopwatch_mode(stopwatch_mode), .display_mode(display_mode), .signal_sound_1(sound1),. signal_sound_2(sound2), .signal_sound_3(sound3), .leaderboard_LED(rank), .slow_or_fast(lb_mode), .fast_1(down1), .fast_2(down2), .fast_3(down3), .slow_1(up1), .slow_2(up2), .slow_3(up3));
+
+// Instantiate sound module
+
+// This one will probably need some rejigging in order to accommodate changes to wire I/O
+// music music_out(.clk_100MHz(clock), .beep_trigger(zero), .speaker(speaker), .sound1(sound1), .sound2(sound2), .sound3(sound3));    
 
 endmodule
