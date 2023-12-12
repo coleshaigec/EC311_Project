@@ -92,13 +92,13 @@ reg on = 1;
 //    wire [38:0] disptime;
 // Instantiate debouncers
 
-    debouncer st_debounce(.in(startstop),.clock(clock),.db(db_st));
-    debouncer inc_debounce(.in(increment),.clock(clock),.db(inc));
-    debouncer rst_debounce(.in(reset),.clock(clock),.db(rst));
+//    debouncer st_debounce(.in(startstop),.clock(clock),.db(db_st));
+//    debouncer inc_debounce(.in(increment),.clock(clock),.db(inc));
+//    debouncer rst_debounce(.in(reset),.clock(clock),.db(rst));
 
 // Instantiate stopwatch
 
-    stopwatch tl_stopwatch(.s(db_st), .p(prog), .clk(clock), .u(up), .rst(rst), .inc(inc), .min(min), .t(t), .zero(zero));
+    stopwatch tl_stopwatch(.s(startstop), .p(prog), .clk(clock), .u(up), .rst(reset), .inc(inc), .min(min), .t(t), .zero(zero));
         
 // Instantiate time display MUX
 
