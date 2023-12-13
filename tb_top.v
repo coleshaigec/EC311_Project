@@ -55,29 +55,30 @@ reg [1:0] lbm;
 wire [2:0] rank;
 wire [7:0] cathode;
 wire [7:0] anode;
+wire blinker;
 //reg [1:0] lb_mode;
 //wire [38:0] t_out;
 //wire zero;
 
 // Instantiate module
 
-top top_UUT(.prog(prog), .increment(inc), .reset(rst), .clock(clk), .min(min), .up(up), .startstop(startstop), .stopwatch_mode(swm), .display_mode(dm), .rank(rank), .cathode(cathode), .anode(anode));
+top top_UUT(.prog(prog), .increment(inc), .reset(rst), .clock(clk), .min(min), .up(up), .startstop(startstop), .stopwatch_mode(swm), .display_mode(dm), .rank(rank), .cathode(cathode), .anode(anode) ,.blinker(blinker));
 
 // Generate signals
 
 initial begin
     clk = 0;
     prog = 0;
-    up = 0; 
+    up = 1; 
     inc = 0;
     min = 0;
     dm = 0;
     rst = 0;
     swm = 0;
     startstop = 0;
-    #50
-    startstop = 1; #18;
-    startstop = 0;
+//    #50
+//    startstop = 1; #18;
+//    startstop = 0;
 end
 
 always begin

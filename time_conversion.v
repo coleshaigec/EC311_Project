@@ -14,6 +14,8 @@ module time_conversion(
     wire [7:0] BCD_minutes;
 	wire [7:0] BCD_seconds;
 	wire [11:0] BCD_milliseconds;
+	reg [33:0] total_ms_after_min;
+	reg [33:0] total_ms_after_sec;
 
     binary_to_BCD b2BCD_min(min,BCD_minutes);
 	binary_to_BCD b2BCD_sec(sec,BCD_seconds);
@@ -25,14 +27,14 @@ module time_conversion(
 
         // Extract minutes
         min = total_ms / 60000;
-        total_ms = total_ms % 60000;        
+        total_ms_after_min = total_ms % 60000;        
 
         // Extract seconds from the remaining milliseconds
         sec = total_ms / 1000;
-        total_ms = total_ms % 1000;
+        total_ms_after_sec = total_ms_after_min % 1000;
         
         // Extract milliseconds (remaining after subtracting seconds)
-        ms = total_ms;
+        ms = total_ms_after_sec;
         
 		time_out = {4'b0000,BCD_minutes,BCD_seconds,BCD_milliseconds};
     end

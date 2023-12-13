@@ -32,7 +32,7 @@ module seven_seg_fsm(
     
 	//reg [31:0] input_number; // FOR TESTING ONLY
 	//reg mode; //FOR TESTING ONLY
-	wire [31:0] BCD_number;
+	//wire [31:0] BCD_number;
 	wire [31:0] disp_number;
     reg [3:0] four_bit_number;
     // instantiate decoder that decodes the four bit number into the cathode
@@ -99,52 +99,60 @@ module seven_seg_fsm(
 		// set the four bit number to be the approprate slice of the 16-bit number
 		case (state)
 		  0: begin
-		      anode <= 8'b11111110;
-		      four_bit_number[3:0] <= disp_number[3:0];
-			  cur_point <= dec_points[0];
-		      state <= 1;
+		      anode = 8'b11111110;
+		      four_bit_number[3:0] = disp_number[3:0];
+			  cur_point = dec_points[0];
+			  #5;
+		      state = 1;
 		  end
 		  1: begin
-		      anode <= 8'b11111101;
-		      four_bit_number[3:0] <= disp_number[7:4];
-			  cur_point <= dec_points[1];
-		      state <= 2;
+		      anode = 8'b11111101;
+		      four_bit_number[3:0] = disp_number[7:4];
+			  cur_point = dec_points[1];
+			  #5;
+		      state = 2;
 		  end
 		  2: begin
-		      anode <= 8'b11111011;
-		      four_bit_number[3:0] <= disp_number[11:8];
-			  cur_point <= dec_points[2];	
-		      state <= 3;
+		      anode = 8'b11111011;
+		      four_bit_number[3:0] = disp_number[11:8];
+			  cur_point = dec_points[2];	
+			  #5;
+		      state = 3;
 		  end
 		  3: begin
-		      anode <= 8'b11110111;
-		      four_bit_number[3:0] <= disp_number[15:12];
-			  cur_point <= dec_points[3];
-		      state <= 4;
+		      anode = 8'b11110111;
+		      four_bit_number[3:0] = disp_number[15:12];
+			  cur_point = dec_points[3];
+			  #5;
+		      state = 4;
 		  end
 		  4: begin
-		      anode <= 8'b11101111;
-		      four_bit_number[3:0] <= disp_number[19:16];
-			  cur_point <= dec_points[4];
-		      state <= 5;
+		      anode = 8'b11101111;
+		      four_bit_number[3:0] = disp_number[19:16];
+			  cur_point = dec_points[4];
+			  #5;
+		      state = 5;
 		  end
 		  5: begin
-		      anode <= 8'b11011111;
-		      four_bit_number[3:0] <= disp_number[23:20];
-			  cur_point <= dec_points[5];
-		      state <= 6;
+		      anode = 8'b11011111;
+		      four_bit_number[3:0] = disp_number[23:20];
+			  cur_point = dec_points[5];
+			  #5;
+		      state = 6;
 		  end
 		  6: begin
-		      anode <= 8'b10111111;
-		      four_bit_number[3:0] <= disp_number[27:24];
-			  cur_point <= dec_points[6];
-		      state <= 7;
+		      anode = 8'b10111111;
+		      four_bit_number[3:0] = disp_number[27:24];
+			  cur_point = dec_points[6];
+			  #5;
+		      state = 7;
 		  end
 		  7: begin
-		      anode <= 8'b01111111;
-		      four_bit_number[3:0] <= disp_number[31:28];
-			  cur_point <= dec_points[7];
-		      state <= 0;
+		      anode = 8'b01111111;
+		      four_bit_number[3:0] = disp_number[31:28];
+			  cur_point = dec_points[7];
+			  #5;
+		      state = 0;
 		  end		  
 
 	   endcase    

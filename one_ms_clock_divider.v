@@ -37,10 +37,11 @@ module one_ms_clock_divider(
 		//   then flip the output clock,
 		//   and reset count to zero.
 		
-		if (count <= 100000) //out_clk has a period of 50 ms
-		//if (count <= 3)                 // WILL NOT SIMULATE IF 500000000 TOO LONG FOR SIMULATION TIMESCALE
+		//if (count <= 100000) //out_clk has a period of 1 ms
+		if (count <= 100000) begin //out_clk has a period of 1 ms
+		//if (count <= 3) begin              // WILL NOT SIMULATE IF 500000000 TOO LONG FOR SIMULATION TIMESCALE
 		   count = count +1;
-		else begin
+		end else begin
 		  count <= 0;
 		  out_clk <= ~out_clk;
 		end

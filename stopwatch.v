@@ -27,9 +27,12 @@ module stopwatch(
     input rst,                  // RESET: resets the time during stopwatch operation
     input inc,                  // INCREMENT: used in the programming mode to increase the maxtime
     input min,                  // MINUTE: used in the programming mode
+    input [18:0] init_state,
     output reg [38:0] t,        // TIME: this is the main output of the module
+    output reg test,            //  
     output reg zero             // if the countdown mode is active and the time runs out, this signal goes to sound module to tell it to beep
     );
+    
     
     // s, rst, and inc are buttons
     // p, u, and min are switches
@@ -41,7 +44,6 @@ module stopwatch(
 
     // register declarations
     // time count is 39 bits in size - maximum time that can be processed by this design is 59 minutes and 59 seconds
-    
     reg [38:0] HCT;                         // Hard Coded Time - if the user doesn't program a time, this holds a preset countdown time for that mode
     reg [38:0] maxtime;                     // captures the time programmed by the user; configured to allow up to 59 minutes 59 seconds
     reg [38:0] u_count;                     // supports the counter in count-up mode
@@ -75,9 +77,10 @@ module stopwatch(
     // initialize FSM
     
     initial begin
-        present_state = S0;                                          // machine will stay in start state for one clock cycle
-        next_state = S0;                                             // machine will stay in start state for one clock cycle
-        HCT = 39'b000000101100101101000001011110000000000;           // hard coded time initially set at one minute
+        present_state = init_state;                                          // machine will stay in start state for one clock cycle
+        next_state = init_state;                                             // machine will stay in start state for one clock cycle
+          HCT = 39'b000101011111101010101101101100000000;
+//        HCT = 39'b000000101100101101000001011110000000000;           // hard coded time initially set at one minute
 //        HCT = 4;
         maxtime = 0;                                                 // initialize all count registers at zero
         u_count = 0;                                                 // initialize all count registers at zero
@@ -97,6 +100,9 @@ module stopwatch(
     always @(posedge clk) begin
         if (zero == 1) begin
          zero = 0;
+        end
+        if (t > 1000000) begin
+            test = 1;
         end
         case(present_state)
         S0:
