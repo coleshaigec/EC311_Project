@@ -23,11 +23,11 @@
 
 module beep(clk, value, value_2, value_3, value_4, speaker);
 input clk;
-input  value;
-input value_2;
-input value_3;
-input value_4;
-output reg speaker;
+input  value;//Corresponds to signal for 1st high score for any mode from leaderboard when it changes
+input value_2;//Corresponds to signal from alarm clock that will turn on to indicate to play sound when it reaches 0 time (since alarm clock counts down to 0)
+input value_3;//Corresponds to signal for 2nd high score for any mode from leaderboard when it changes
+input value_4;//Corresponds to signal for 3rd high score for any mode from leaderboard when it changes
+output reg speaker;//Output to audio jack where we connect a speaker 
 
 reg current_value, current_value_2, current_value_3, current_value_4;
 
@@ -35,7 +35,7 @@ wire Clock;
 clock_divider c1(.clk(clk),.new_clk(Clock)); // used to divide 100mHz clock from board to 50mHz
 
 
-reg [15:0] counter1; // counter size detirmines frequency of tone (tone freq = clkfreq/2^n)
+reg [15:0] counter1; // counter size detirmines frequency of tone. Different reg sizes allow for different tones to be played since it influences how fast it increments to max value, since MSB is outputed to speaker
 reg [14:0] counter2;
 reg [13:0] counter3;
 reg [16:0] counter4;
@@ -52,11 +52,13 @@ always @(posedge Clock)begin
     if (no_begin_beep) begin
     time_lasting<=25'd25000000;
     no_begin_beep<=0;
+    //When value changes, it won't equal its corresponding current_value variable, resetting the time_lasting variable and counter variables so the sound will play again for one second and won't play continously
     end else if (current_value != value || value_2 == 1'b1 && current_value_2 == 1'b0 || value_3!=current_value_3 || value_4!=current_value_4)
     begin
     time_lasting<=0;
     counter1<=0;
     counter2<=0;
+        //Sound signals allow to play these different tones depending on which input signal changes so you know when alarm clock finishes, when specifically 1st place score changes, etc
         if (current_value != value)begin
             sound1 = 1;
         end
@@ -71,14 +73,14 @@ always @(posedge Clock)begin
         end
   
     end
-    
+    //Current values are used to check if there was a change in input
     current_value = value;
     current_value_2 = value_2;
     current_value_3 = value_3;
     current_value_4 = value_4;
     
     
-    if(time_lasting<25'd25000000)begin // creates a counter that allows sound play for 1 second
+    if(time_lasting<25'd25000000)begin // creates a counter that allows sound play for 1 second(in combination with clock frequency makes it one second)
         time_lasting<=time_lasting+1;
 
         counter1<=counter1+1;
@@ -98,7 +100,7 @@ always @(posedge Clock)begin
         speaker = counter3[13];
         end
         if (sound3 && !sound1 && !sound2 && value_2 == 0)begin
-        speaker = counter4[16];
+            speaker = counter4[16];//MSB is outputed to speaker
         end
      end
         
