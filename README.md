@@ -1,6 +1,16 @@
+Project Title: The Time Machine
+
 Names: Cole Shaigec, Henry Bega, Alex Melnick, Macy Bryer-Charette
-UIDs: U38987069 (Cole) and U11534484 (Macy)
+UIDs: U38987069 (Cole), U27797675 (Henry),  and U11534484 (Macy)
 TF name: Shiva Raja
+
+GitHub Repository Link:
+Demonstration Video Link:
+
+
+PROJECT DESCRIPTION
+	We have constructed a multifunctional programmable stopwatch on the NEXYS A7-100t board with a Xilinx ARTIX-7 FPGA. It counts up from zero or counts down, either from a hard-coded time or a time programmed by the user. The user can adjust the countdown time, reset the stopwatch,.  using switches and buttons on the board
+
 
 Submission contents (see discussion for more details on functionality):
  **Zip file containing the following Verilog files:
