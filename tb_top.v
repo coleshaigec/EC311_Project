@@ -174,6 +174,10 @@ initial begin
     rst = 0; #100
     startstop = 1; rst = 0; #17
     startstop = 0;
+    
+    
+    
+    #5000 $finish;
     end
 always begin
 #10 clk = ~clk;

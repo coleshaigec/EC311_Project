@@ -27,7 +27,6 @@ module stopwatch(
     input rst,                  // RESET: resets the time during stopwatch operation
     input inc,                  // INCREMENT: used in the programming mode to increase the maxtime
     input min,                  // MINUTE: used in the programming mode
-    input [18:0] init_state,
     output reg [38:0] t,        // TIME: this is the main output of the module
     output reg test,            //  
     output reg zero             // if the countdown mode is active and the time runs out, this signal goes to sound module to tell it to beep
@@ -77,8 +76,8 @@ module stopwatch(
     // initialize FSM
     
     initial begin
-        present_state = init_state;                                          // machine will stay in start state for one clock cycle
-        next_state = init_state;                                             // machine will stay in start state for one clock cycle
+        present_state = S0;                                          // machine will stay in start state for one clock cycle
+        next_state = S0;                                             // machine will stay in start state for one clock cycle
           HCT = 39'b000101011111101010101101101100000000;
 //        HCT = 39'b000000101100101101000001011110000000000;           // hard coded time initially set at one minute
 //        HCT = 4;
