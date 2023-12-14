@@ -19,26 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-// NEW SIGNALS
-
-// BUTTONS
-// startstop
-// inc
-// rst
-
-// SWITCHES
-// [2:0] display_mode
-// prog
-// up
-// min
-// [1:0] stopwatch_mode
-
-
-// LED output
-// 5 LEDs for Henry
-// 2 for slow_or_fast
-// 3 for leaderboard_LED
-
 module top (
     input prog,
     input increment,
@@ -62,7 +42,6 @@ reg on = 1;
 // Wire and register declarations
 
 // Registers for display
-    //reg display_number_format;
     reg [31:0] number_to_display;
     reg [7:0] decimal_points = 8'b00101000;
 
@@ -73,10 +52,7 @@ reg on = 1;
 
 // Wires for stopwatch I/O signals
     wire zero;
-//    wire clkSW;
     wire [38:0] t;
-//    reg [18:0] init_state = 19'b0000000000000010000;
-//    one_ms_clock_divider Babs(clock, clkSW);
 
 // Output wires for leaderboard
 
@@ -96,26 +72,17 @@ reg on = 1;
     
 // Instantiate debouncers
 
-//    debouncer st_debounce(.in(startstop),.clock(clock),.db(db_st));
-//    debouncer inc_debounce(.in(increment),.clock(clock),.db(inc));
-//    debouncer rst_debounce(.in(reset),.clock(clock),.db(rst));
+   debouncer st_debounce(.in(startstop),.clock(clock),.db(db_st));
+   debouncer inc_debounce(.in(increment),.clock(clock),.db(inc));
+   debouncer rst_debounce(.in(reset),.clock(clock),.db(rst));
 
 // Instantiate stopwatch
 
-//    reg _startstop = 0;
-//    //reg _test = 0;
-//    reg _prog = 0;
-//    reg _up = 1;
-//    reg _reset =0;
-//    reg _increment = 0;
-//    reg _min = 0;
-    stopwatch tl_stopwatch(.s(startstop),.p(prog), .clk(clock), .u(up), .rst(reset), .inc(increment), .min(min), .t(t), .zero(zero));
+    stopwatch tl_stopwatch(.s(db_st),.p(prog), .clk(clock), .u(up), .rst(rst), .inc(inc), .min(min), .t(t), .zero(zero));
         
 // Instantiate time display MUX
 
-// Need to reconfigure leaderboard to get it to spit out six output registers before we can use the time MUX
-
-//  time_MUX dispMUX(.sel(display_mode), .up_time1(up1), .up_time2(up2), .up_time3(up3), .down_time1(down1), .down_time2(down2), .down_time3(down3), .disp_time(disptime), .timewire(t));
+     time_MUX dispMUX(.sel(display_mode), .up_time1(up1), .up_time2(up2), .up_time3(up3), .down_time1(down1), .down_time2(down2), .down_time3(down3), .disp_time(disptime), .timewire(t));
     
 //Instantiate display
 
@@ -132,12 +99,6 @@ reg on = 1;
 
 // Instantiate sound module
 
-// This one will probably need some rejigging in order to accommodate changes to wire I/O
  beep make_sound(.clk(clock),.speaker(speaker), .value(sound1), .value_2(zero), .value_3(sound2), .value_4(sound3));
-
-
-    //blinker blink(.time_in(t), .clk(clock), .blinker(blinker));
-//    blinker blink(.time_in(t), .blinker(blinker));
-   
         
 endmodule
