@@ -38,8 +38,8 @@ module one_ms_clock_divider(
 		//   then flip the output clock,
 		//   and reset count to zero.
 		
-//		if (count <= 100000) begin //out_clk has a period of 1 ms
-		if (count <= 3) begin //For simulation purposes
+		if (count <= 100000) begin //out_clk has a period of 1 ms
+//		if (count <= 3) begin //For simulation purposes
 		   count = count +1;
 		end else begin
 		  count <= 0;
