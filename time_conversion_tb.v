@@ -40,6 +40,7 @@ module time_conversion_tb(
    
    initial begin
         time_in = 39'b10110010110100000101111000000000;
+        #100000 $finish;
    end 
    
 endmodule

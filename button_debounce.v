@@ -1,17 +1,20 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Boston University
+// Engineer: Alex Melnick
+// 
 // 
 // Create Date: 10/23/2023 05:48:28 PM
 // Design Name: 
 // Module Name: button_debounce
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
+// Project Name: EC311 Logic Design Final Project
+// Project Name: EC311 Logic Design Final Project
+// Target Devices: NEXYS A7-100t with ARTIX-7 FPGA
+// Tool Versions: Vivado 2022.2
+// Description: Debounces buttons and switches with a delay of 50ms
 // 
-// Dependencies: 
+// Dependencies: fifty_ms_clock_divider.v
+//               D_Flip_Flop.v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -28,44 +31,14 @@
 //Works for switches and buttons
 
 module debouncer(
-    input in,
+    input in, //Input button / switch
     input clock,
-    output db
+    output db //Output debounced button / switch
     );
     
     wire div_clock;
-    reg[32:0] count;
-    reg out_clk;    
-    
-    fifty_ms_clock_divider clock_div(clock,div_clock);
-    //D_Flip_Flop D1(in, out_clk,db);
-    D_Flip_Flop D1(in, div_clk,db);
-    
-    
-   
-
-	initial begin
-		// initialize everything to zero
-		count = 0;
-		out_clk = 0;
-	end
-	
-	/*always @(posedge clock)
-	begin
-		// increment count by one
-		// if count equals to some big number (that you need to calculate),
-		//   then flip the output clock,
-		//   and reset count to zero.
-		
-		if (count <= 2) //out_clk has a period of 20 ms
-		//if (count <= 3)                 // WILL NOT SIMULATE IF 500000000 TOO LONG FOR SIMULATION TIMESCALE
-		   count = count +1;
-		else begin
-		  count <= 0;
-		  out_clk <= ~out_clk;
-		end
-	end*/
-    
-
+  
+    fifty_ms_clock_divider clock_div(clock,div_clock); // Debouncer holds signal for a period of 50ms
+    D_Flip_Flop D1(in, div_clk,db); // Debouncing mechanism
     
 endmodule

@@ -1,15 +1,16 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Boston University
+// Engineer: Alex Melnick
 // 
 // Create Date: 12/09/2023 06:10:12 PM
 // Design Name: 
 // Module Name: fifty_ms_clock_divider
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
+// Project Name: EC311 Logic Design Final Project
+// Project Name: EC311 Logic Design Final Project
+// Target Devices: NEXYS A7-100t with ARTIX-7 FPGA
+// Tool Versions: Vivado 2022.2
+// Description: Divides 100 MHz onboard oscillator into 50 ms clock
 // 
 // Dependencies: 
 // 
@@ -35,8 +36,13 @@ module fifty_ms_clock_divider(
 	always @(posedge clock)
 	begin
 		
+		// increment count by one
+		// if count equals to 5,000,000,
+		//   then flip the output clock,
+		//   and reset count to zero.
+		
 		if (count <= 5000000) //out_clk has a period of 50 ms
-		//if (count <= 3)                 // WILL NOT SIMULATE IF 500000000 TOO LONG FOR SIMULATION TIMESCALE
+		//if (count <= 3)     // FOR SIMULATION PURPOSES
 		   count <= count +1;
 		else begin
 		  count <= 0;

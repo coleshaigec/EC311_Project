@@ -75,7 +75,7 @@ reg on = 1;
     wire zero;
 //    wire clkSW;
     wire [38:0] t;
-    reg [18:0] init_state = 19'b0000000000000010000;
+//    reg [18:0] init_state = 19'b0000000000000010000;
 //    one_ms_clock_divider Babs(clock, clkSW);
 
 // Output wires for leaderboard
@@ -101,25 +101,33 @@ reg on = 1;
 
 // Instantiate stopwatch
 
-    stopwatch tl_stopwatch(.s(startstop), .test(test), .init_state(init_state),.p(prog), .clk(clock), .u(up), .rst(reset), .inc(increment), .min(min), .t(t), .zero(zero));
+    reg _startstop = 0;
+    //reg _test = 0;
+    reg _prog = 0;
+    reg _up = 1;
+    reg _reset =0;
+    reg _increment = 0;
+    reg _min = 0;
+    stopwatch tl_stopwatch(.s(_startstop),  .init_state(_init_state),.p(_prog), .clk(clock), .u(_up), .rst(_reset), .inc(_increment), .min(_min), .t(t), .zero(zero));
         
 // Instantiate time display MUX
 
 // Need to reconfigure leaderboard to get it to spit out six output registers before we can use the time MUX
 
-  time_MUX dispMUX(.sel(display_mode), .up_time1(up1), .up_time2(up2), .up_time3(up3), .down_time1(down1), .down_time2(down2), .down_time3(down3), .disp_time(disptime), .timewire(t));
+//  time_MUX dispMUX(.sel(display_mode), .up_time1(up1), .up_time2(up2), .up_time3(up3), .down_time1(down1), .down_time2(down2), .down_time3(down3), .disp_time(disptime), .timewire(t));
     
 //Instantiate display
 
-    debounced_switch_counter dsc(.clock(clock),.time_in(t), .cathode(cathode), .anode(anode));
-    //seven_seg_fsm disp_FSM(.clock(clock),.input_number(t), .dec_points(decimal_points),.cathode(cathode),.anode(anode));
+    //debounced_switch_counter dsc(.clock(clock),.time_in(t), .cathode(cathode), .anode(anode));
+//    seven_seg_fsm disp_FSM(.clock(clock),.input_number(disptime), .dec_points(decimal_points),.cathode(cathode),.anode(anode));
+    seven_seg_fsm disp_FSM(.clock(clock),.input_number(t), .dec_points(decimal_points),.cathode(cathode),.anode(anode));
     //seven_seg_fsm_old disp_FSM(.clock(clock),.mode(1'b0),.input_number(t),.dec_points(decimal_points),.cathode(cathode),.anode(anode));
     
    
     
 //Instantiate leaderboard
 
-   leaderboard tl_leaderboard(.time_in(disptime), .stopwatch_mode(stopwatch_mode), .display_mode(display_mode), .signal_sound_1(sound1),. signal_sound_2(sound2), .signal_sound_3(sound3), .leaderboard_LED(rank), .slow_or_fast(lb_mode), .fast_1(down1), .fast_2(down2), .fast_3(down3), .slow_1(up1), .slow_2(up2), .slow_3(up3));
+//   leaderboard tl_leaderboard(.time_in(disptime), .stopwatch_mode(stopwatch_mode), .display_mode(display_mode), .signal_sound_1(sound1),. signal_sound_2(sound2), .signal_sound_3(sound3), .leaderboard_LED(rank), .slow_or_fast(lb_mode), .fast_1(down1), .fast_2(down2), .fast_3(down3), .slow_1(up1), .slow_2(up2), .slow_3(up3));
 
 // Instantiate sound module
 
@@ -127,7 +135,8 @@ reg on = 1;
 // music music_out(.clk_100MHz(clock), .beep_trigger(zero), .speaker(speaker), .sound1(sound1), .sound2(sound2), .sound3(sound3));    
 
 
-    blinker blink(.time_in(t), .clk(clock), .blinker(blinker));
+    //blinker blink(.time_in(t), .clk(clock), .blinker(blinker));
+//    blinker blink(.time_in(t), .blinker(blinker));
    
         
 endmodule

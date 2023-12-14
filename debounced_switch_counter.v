@@ -40,6 +40,7 @@ module debounced_switch_counter(
     wire ms_clock;
     
     //counter ct(debounced_swt,count);
+    //seven_seg_fsm disp(clock,count,decs,cathode,anode);
     seven_seg_fsm disp(clock,count,decs,cathode,anode);
     //button_debounce switch(sw[0],clock,debounced_sw);
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
@@ -55,7 +56,7 @@ module debounced_switch_counter(
 //	//   else begin
 //		//   count = 0;
 //		  //out_clk <= ~out_clk;
-//	//	end
+//	end
 
     initial begin
         count = 0;

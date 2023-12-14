@@ -1,17 +1,19 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Boston University
+// Engineer: Alex Melnick
 // 
 // Create Date: 10/23/2023 08:43:13 AM
 // Design Name: 
-// Module Name: fsm
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
+// Module Name: seven_seg_fsm
+// Project Name: EC311 Logic Design Final Project
+// Target Devices: NEXYS A7-100t with ARTIX-7 FPGA
+// Tool Versions: Vivado 2022.2
+// Description: Logic for driving all 8 7-segment displays from an inputted number
 // 
-// Dependencies: 
+// Dependencies: one_ms_clock_divider.v
+//               seven_seg_decoder.v
+//               time_conversion.v
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -22,89 +24,47 @@
 
 module seven_seg_fsm(
         input clock,
-		//input [1:0] mode, // 0 = Decimal, 1 = Hexadecimal, 2 = min, sec //UNCOMMENT FOR INTEGRATION
-        //input [15:0]swt, // FOR TESTING ONLY
-        input [38:0] input_number, //UNCOMMENT FOR INTEGRATION
-		input [7:0] dec_points,
-		output [7:0] cathode,
-        output reg [7:0] anode
+        input [38:0] input_number, //Input time to be processed and sent to displays
+		input [7:0] dec_points, //Input which decimal points on 7-seg displays are lit up
+		output [7:0] cathode, //Output which lights on an individual 7-seg display are lit up
+        output reg [7:0] anode //Output which 7-segment display is being driven
     );
     
 	//reg [31:0] input_number; // FOR TESTING ONLY
-	//reg mode; //FOR TESTING ONLY
-	//wire [31:0] BCD_number;
-	wire [31:0] disp_number;
-    reg [3:0] four_bit_number;
-    // instantiate decoder that decodes the four bit number into the cathode
-    reg [2:0] state;
-    wire ms_clock;
-	reg cur_point;
+	
+	wire [31:0] disp_number; //Final number being pushed to all displays
+    reg [3:0] four_bit_number; //Final number being push to an individual display
+    reg [2:0] state; //Represents which 7-seg is being driven at the moment
+    wire ms_clock; 
+	reg cur_point; //Represents the decimal point of the current individual display
 
-	wire [5:0] minutes;
-	wire [5:0] seconds;
-	wire [9:0] milliseconds;
-	wire [5:0] BCD_minutes;
-	wire [5:0] BCD_seconds;
-	wire [9:0] BCD_milliseconds;
-	reg [31:0] time_out; //output to display in minutes, seconds, milliseconds
-    
-	//for decimal mode
     one_ms_clock_divider one_ms_clk_div(clock,ms_clock);
-    seven_seg_decoder dec7(four_bit_number,cur_point,cathode);
+    seven_seg_decoder dec7(four_bit_number,cur_point,cathode); //Sends the final number for the display to decoder 
+                                                               //to be translated into individual LEDs on the display
     
-	//for hex mode
-	//binary_to_BCD b2BCD(input_number[26:0],BCD_number);
-    
-	//for min,sec mode
-	//time_conversion t_conv(input_number,minutes,seconds,milliseconds);
-	time_conversion t_conv(input_number,disp_number);
-	/*binary_to_BCD b2BCD_min(minutes,BCD_minutes);
-	binary_to_BCD b2BCD_sec(seconds,BCD_seconds);
-	binary_to_BCD b2BCD_ms(milliseconds,BCD_milliseconds);
+	time_conversion t_conv(input_number,disp_number);  //Convers input time in 10 ns increments into minutes, seconds, and milliseconds
 
-*/
-	/*always @(input_number) begin
-		//time_out = {4'b0000,BCD_minutes,BCD_seconds,BCD_milliseconds};
-		disp_number = time_out;
-		/if (mode == 0) begin
-			disp_number <= BCD_number;
-		end else if(mode == 1) begin
-			disp_number <= input_number[31:0];
-		end else begin
-			disp_number <= time_out;
-		end
-	end*/ 
 		
     initial begin
 		state = 0;
-		anode = 8'b11111111;
+		anode = 8'b11111111; //Initialize all LEDs to off (0 is on, 1 is off)
 		four_bit_number = 0;
 		cur_point = 0;
-		//time_out = 0;
-		//minutes = 0;
-		//seconds = 0;
-		//milliseconds = 0;
-		//input_number = 0; // FOR TESTING ONLY
 	end
     
-    always @(posedge ms_clock)
+    always @(posedge ms_clock) //Updates every millesecond
 	begin
 	   //input_number[14:0] = swt[14:0]; // FOR TESTING ONLY
        //mode = swt[15]; //FOR TESTING ONLY
 		
-		// increment state
-		// set anode (which display do you want to set?)
-		//   hint: if state == 0, then set only the LSB of anode to zero,
-		//         if state == 1, then set only the second to LSB to zero.
-		// set the four bit number to be the approprate slice of the 16-bit number
-		case (state)
+		case (state) //Case statement switches between each individual 7-seg display
 		  0: begin
-		      anode = 8'b11111110;
-		      four_bit_number[3:0] = disp_number[3:0];
-			  cur_point = dec_points[0];
-			  #5;
-		      state = 1;
-		  end
+		      anode = 8'b11111110; //Selects the right-most display
+		      four_bit_number[3:0] = disp_number[3:0]; //Sets the output number to be displayed to the least significant 4 bits
+			  cur_point = dec_points[0]; //Sets the decimal point to the least significant bit
+			  #5; //Wait 5ns
+		      state = 1; //Go to next state (i.e., switch to the display to the left)
+		  end //All of the following states work the same as State 0 unless otherwise noted
 		  1: begin
 		      anode = 8'b11111101;
 		      four_bit_number[3:0] = disp_number[7:4];
@@ -152,7 +112,7 @@ module seven_seg_fsm(
 		      four_bit_number[3:0] = disp_number[31:28];
 			  cur_point = dec_points[7];
 			  #5;
-		      state = 0;
+		      state = 0; //Reset to state 0
 		  end		  
 
 	   endcase    
