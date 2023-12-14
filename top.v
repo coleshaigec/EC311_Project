@@ -49,7 +49,7 @@ module top (
     input [1:0] stopwatch_mode,
     input  [2:0] display_mode,
     input clock,
-//    output speaker,
+    output speaker,
     output test,
     output [2:0] rank,
     output [1:0] lb_mode,
@@ -71,7 +71,7 @@ reg on = 1;
     wire inc;
     wire rst;
 
-// Wires for stopwatch i/O signals
+// Wires for stopwatch I/O signals
     wire zero;
 //    wire clkSW;
     wire [38:0] t;
@@ -86,13 +86,14 @@ reg on = 1;
 
 // Output registers for leaderboard and time MUX
 
-//    wire [38:0] up1;
-//    wire [38:0] up2;
-//    wire [38:0] up3;
-//    wire [38:0] down1;
-//    wire [38:0] down2;
-//    wire [38:0] down3;
+    wire [38:0] up1;
+    wire [38:0] up2;
+    wire [38:0] up3;
+    wire [38:0] down1;
+    wire [38:0] down2;
+    wire [38:0] down3;
     wire [38:0] disptime;
+    
 // Instantiate debouncers
 
 //    debouncer st_debounce(.in(startstop),.clock(clock),.db(db_st));
@@ -101,14 +102,14 @@ reg on = 1;
 
 // Instantiate stopwatch
 
-    reg _startstop = 0;
-    //reg _test = 0;
-    reg _prog = 0;
-    reg _up = 1;
-    reg _reset =0;
-    reg _increment = 0;
-    reg _min = 0;
-    stopwatch tl_stopwatch(.s(_startstop),  .init_state(_init_state),.p(_prog), .clk(clock), .u(_up), .rst(_reset), .inc(_increment), .min(_min), .t(t), .zero(zero));
+//    reg _startstop = 0;
+//    //reg _test = 0;
+//    reg _prog = 0;
+//    reg _up = 1;
+//    reg _reset =0;
+//    reg _increment = 0;
+//    reg _min = 0;
+    stopwatch tl_stopwatch(.s(startstop),.p(prog), .clk(clock), .u(up), .rst(reset), .inc(increment), .min(min), .t(t), .zero(zero));
         
 // Instantiate time display MUX
 
@@ -127,12 +128,12 @@ reg on = 1;
     
 //Instantiate leaderboard
 
-//   leaderboard tl_leaderboard(.time_in(disptime), .stopwatch_mode(stopwatch_mode), .display_mode(display_mode), .signal_sound_1(sound1),. signal_sound_2(sound2), .signal_sound_3(sound3), .leaderboard_LED(rank), .slow_or_fast(lb_mode), .fast_1(down1), .fast_2(down2), .fast_3(down3), .slow_1(up1), .slow_2(up2), .slow_3(up3));
+   leaderboard tl_leaderboard(.time_in(t), .stopwatch_mode(stopwatch_mode), .display_mode(display_mode), .signal_sound_1(sound1),. signal_sound_2(sound2), .signal_sound_3(sound3), .leaderboard_LED(rank), .slow_or_fast(lb_mode), .fast_1(down1), .fast_2(down2), .fast_3(down3), .slow_1(up1), .slow_2(up2), .slow_3(up3));
 
 // Instantiate sound module
 
 // This one will probably need some rejigging in order to accommodate changes to wire I/O
-// music music_out(.clk_100MHz(clock), .beep_trigger(zero), .speaker(speaker), .sound1(sound1), .sound2(sound2), .sound3(sound3));    
+ beep make_sound(.clk(clock),.speaker(speaker), .value(sound1), .value_2(zero), .value_3(sound2), .value_4(sound3));
 
 
     //blinker blink(.time_in(t), .clk(clock), .blinker(blinker));
