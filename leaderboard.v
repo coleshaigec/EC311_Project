@@ -1,15 +1,16 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Henry Bega 
 // 
 // Create Date: 12/07/2023 10:50:48 AM
 // Design Name: 
 // Module Name: leaderboard
-// Project Name: 
+// Project Name: ENG EC 311 Introduction to Digital Logic Design Final Project
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: leaderboard module that orders the high scores of two submodes through a fed in time. If the time meets requirements (if it is better than any of the high scores), it replaces the specific high score.
+//Signals are sent as LEDs that show what mode and what rank is being shown on 7 segment display. Signals are sent whenever a rank changed to produce a 1 second sound (done in beep.v module)
 // 
 // Dependencies: 
 // 
