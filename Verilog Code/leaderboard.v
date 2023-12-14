@@ -1,17 +1,18 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Henry Bega 
 // 
 // Create Date: 12/07/2023 10:50:48 AM
 // Design Name: 
 // Module Name: leaderboard
-// Project Name: 
+// Project Name: ENG EC 311 Introduction to Digital Logic Design Final Project
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: leaderboard module that orders the high scores of two submodes through a fed in time. If the time meets requirements (if it is better than any of the high scores), it replaces the specific high score.
+//Signals are sent as LEDs that show what mode and what rank is being shown on 7 segment display. Signals are sent whenever a rank changed to produce a 1 second sound (done in beep.v module)
 // 
-// Dependencies: 
+// Dependencies: stopwatch
 // 
 // Revision:
 // Revision 0.01 - File Created
@@ -19,9 +20,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module leaderboard_sim(
-    input [5:0] time_in, //39 bit input due to 10 nano second incremented time in coming from stopwatch module
+module leaderboard(
+    input wire[38:0] time_in, //39 bit input due to 10 nano second incremented time in coming from stopwatch module
     input [1:0] stopwatch_mode,//Determine which mode the time will be handled through
     input  [2:0] display_mode,//Determines which LED's to light up depending on mode and rank (to indicate what is being shown on 7 segment display)
 //    output reg [21:0] leaderboard_number,
@@ -30,27 +30,15 @@ module leaderboard_sim(
     output reg signal_sound_3,
     output reg [2:0] leaderboard_LED,//LEDs indicating rank
     output reg [1:0] slow_or_fast,//LEDs indicating mode
-    output reg [5:0] time_out
-   
+    output reg [38:0] fast_1,//These proceeding 39 bit regs are outputs send to a Mux that will be used to determine what to show on the 7 segment display alongside stopwatch timer incrementation and alarm clock decrementation
+    output reg [38:0] fast_2,
+    output reg [38:0] fast_3,
+    output reg [38:0] slow_1,
+    output reg [38:0] slow_2,
+    output reg [38:0] slow_3
 );
 
-reg[5:0] fast_1;
-     reg [5:0] fast_2;
-     reg [5:0] fast_3;
-    reg [5:0] slow_1;
-    reg [5:0] slow_2;
-     reg [5:0] slow_3;
-     
-     initial begin
-     fast_1=0;
-     fast_2=0;
-     fast_3=0;
-     slow_1=0;
-     slow_2=0;
-     slow_3=0;
-     end
-   
-     
+    
     //To enter always block, a change in input is needed coming from stopwatch module with its time output. That time output is sent to the leaderboard here, and is evaluated through a case statement. The "scores" of both modes are outputs sent to a Mux where they will be chosen to be displayed on 7 segment according to switch inputs
 
     always @(time_in)
@@ -116,43 +104,36 @@ reg[5:0] fast_1;
     always @* begin
         case(display_mode)
             3'b001: begin
-            time_out<=fast_1;
                 //assign leaderboard_number=fast_1;
                 slow_or_fast=2'b11; //this signal is for LEDS, meant to show on the FPGA which mode we are showing on the 7 segment display
                 leaderboard_LED=3'b001;//this signal is for LEDS, meant to show which rank (which score) we are showing on the 7 segment display in our slow or fast mode
             end
             3'b010: begin
-            time_out<=fast_2;
 //             //   assign leaderboard_number=fast_2;
                 slow_or_fast=2'b11;
                 leaderboard_LED=3'b011;
             end
             3'b011: begin
-            time_out<=fast_3;
 //             //   assign leaderboard_number=fast_3;
                 slow_or_fast=2'b11;
                 leaderboard_LED=3'b111;
             end
             3'b100: begin
-            time_out<=slow_1;
 //            //    assign leaderboard_number=slow_1;
                 slow_or_fast=2'b01;
                 leaderboard_LED=3'b001;
             end
             3'b101: begin
-            time_out<=slow_2;
 //               // assign leaderboard_number=slow_2;
                 slow_or_fast=2'b01;
                 leaderboard_LED=3'b011;
             end
             3'b110: begin
-            time_out<=slow_3;
 //              //  assign leaderboard_number=slow_3;
                 slow_or_fast=2'b01;
                 leaderboard_LED=3'b111;
             end
             default: begin
-            time_out<=0;
 //             //   assign leaderboard_number=0;
                 slow_or_fast=2'b00;
                 leaderboard_LED=3'b000;
